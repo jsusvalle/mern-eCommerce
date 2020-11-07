@@ -10,6 +10,23 @@ module.exports = {
   separator: ':',
   presets: [],
   theme: {
+    extend: {
+      inset: {
+        '15': '1.5rem',
+        '-2': '-2rem',
+        '-3': '-3rem'
+      },
+      fontFamily: {
+        body: ['Arvo', 'serif'],
+      },
+      colors: {
+        Cyan: '#04668d',
+        DarkCyan: '#02808f',
+        LightGrayishCyanFil: '#00a996',
+        DarkGrayishCyan: '#04c39a',
+        VeryDarkGrayishCyan: '#f0f3be'
+      }
+    },
     screens: {
       sm: '640px',
       md: '768px',
