@@ -8,7 +8,6 @@ const Layout = props => {
         <>
             <Head>
                 <title>ShopCart Ecommerce</title>
-                {/* <link rel="icon" href="../" /> */}
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <meta
                     name="description"
@@ -21,9 +20,9 @@ const Layout = props => {
 
             <Header />
 
-            <main>
+            <>
                 {props.children}
-            </main>
+            </>
 
             <Footer />
         </>

@@ -6,9 +6,19 @@
 @tailwind components;
 /* Stop purging. */
 
-/* Write your own custom component styles here */
-.btn-blue {
-    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
+.custom-container {
+    @apply px-6;
+    @apply mx-auto;
+}
+@screen mv {
+    .custom-container {
+        @apply px-8;
+    }
+}
+@screen sm {
+    .custom-container {
+        @apply px-10;
+    }
 }
 
 /* Start purging... */
