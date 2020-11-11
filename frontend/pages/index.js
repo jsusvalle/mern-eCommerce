@@ -5,7 +5,7 @@ import products from '../products';
 const Home = () => {
   return (
     <Layout>
-      <section className="custom-container container">
+      <section className="custom-container">
         <h2 className="text-4xl uppercase tracking-widest my-6 font-semibold">Latest Products</h2>
 
         <div className="grid gap-4 grid-cols-1 mv:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

@@ -14,8 +14,6 @@ const Layout = props => {
                     content="Ecommerce ShopCart"
                 />
                 <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" /> 
-                <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-                rel="stylesheet" />
             </Head>
 
             <Header />
