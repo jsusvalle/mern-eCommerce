@@ -1,0 +1,22 @@
+{
+  "name": "ecommerce-mern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsusvalle/mern-eCommerce.git"
+  },
+  "author": "Jesus Valle",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jsusvalle/mern-eCommerce/issues"
+  },
+  "homepage": "https://github.com/jsusvalle/mern-eCommerce#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

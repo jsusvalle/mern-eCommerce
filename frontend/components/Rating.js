@@ -13,7 +13,7 @@ const Rating = ({total=5, value, text, color}) => {
         for (let i = 1; i <= total; i++) {
             let dot = increment + 0.5;
             const iconSelect = value >= i ? faStar : value >= dot ? faStarHalfAlt : faStarBlank;
-            stars.push(<FontAwesomeIcon icon={iconSelect} style={{color}} />);
+            stars.push(<FontAwesomeIcon icon={iconSelect} style={{color}} key={i} />);
             increment++;
         }
     
