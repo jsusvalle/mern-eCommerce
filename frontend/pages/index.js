@@ -1,8 +1,8 @@
 import Layout from '../components/layouts/Layout';
 import ProductCard from '../components/ProductCard';
-import products from '../products';
+import axios from 'axios';
 
-const Home = () => {
+const Home = ({products}) => {
   return (
     <Layout>
       <section className="custom-container">
@@ -18,11 +18,11 @@ const Home = () => {
   )
 }
 
-// export async function getStaticProps() {
-//   let result = await fetch(products);
-//   return {
-//     props: {products: products}
-//   }
-// }
+export async function getStaticProps() {
+  let {data} = await axios.get('http://localhost:5000/api/products');
+  return {
+    props: {products: data}
+  }
+}
 
 export default Home;

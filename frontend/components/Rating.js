@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faStar, faStarHalfAlt} from '@fortawesome/free-solid-svg-icons';
 import {faStar as faStarBlank} from '@fortawesome/free-regular-svg-icons';
 
-const Rating = ({total=5, value, text, color}) => {
+const Rating = ({total=5, value, text, color, classNames}) => {
 
     const renderRating = () => {
         const stars = [];
@@ -21,7 +21,7 @@ const Rating = ({total=5, value, text, color}) => {
     };
 
     return (  
-        <div className="pt-3">
+        <div className={classNames}>
             <p className="text-gray-800">
                 {renderRating()} {text}
             </p>
