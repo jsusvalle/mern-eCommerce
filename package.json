@@ -5,8 +5,13 @@
   "main": "server.js",
   "scripts": {
     "start": "node backend/server",
-    "dev": "nodemon backend/server"
+    "server": "nodemon backend/server",
+    "client": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "node backend/seeder",
+    "data:destroy": "node backend/seeder -d"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jsusvalle/mern-eCommerce.git"
@@ -18,10 +23,16 @@
   },
   "homepage": "https://github.com/jsusvalle/mern-eCommerce#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "mongoose": "^5.11.1"
   },
   "devDependencies": {
+    "concurrently": "^5.3.0",
     "nodemon": "^2.0.6"
   }
 }
