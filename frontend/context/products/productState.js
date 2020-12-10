@@ -8,7 +8,7 @@ import {
     PRODUCT_BY_ID_REQUEST,
     PRODUCT_BY_ID_SUCCESS,
     PRODUCT_BY_ID_FAIL
-} from '../../types';
+} from '../../types/productConstants';
 
 const ProductState = props => {
     const initialState = {

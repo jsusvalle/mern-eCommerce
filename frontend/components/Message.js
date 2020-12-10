@@ -1,7 +1,15 @@
 import React from 'react'
 
-const Mesage = () => {
-    return ( <h1>hola</h1> );
+const Message = ({variant, children}) => {
+    return ( 
+        <div variant={variant}>
+            {children}
+        </div>
+    );
 }
 
-export default Mesage;
+Message.defaultProps = {
+    variant: 'info'
+}
+
+export default Message;

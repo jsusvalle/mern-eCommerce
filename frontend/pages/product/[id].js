@@ -6,10 +6,13 @@ import Image from 'next/image';
 import Layout from '../../components/layouts/Layout';
 import Rating from '../../components/Rating';
 import Loader from '../../components/Loader';
+import Message from '../../components/Message';
 
 import productContext from '../../context/products/productContext';
 
 const PageProduct = () => {
+
+    const [qty, setQty] = useState(1);
 
     const ProductContext = useContext(productContext);
     const { product, loading, error, getProductById } = ProductContext;
@@ -23,10 +26,16 @@ const PageProduct = () => {
         }
     }, [id]);
 
+    const addToCartHandler = () => {
+        router.push(`/cart/${id}?qty=${qty}`);
+    }
+
     return (  
         <Layout>
             { loading ? (
                 <Loader />
+            ) : error ? (
+                <Message variant='danger'>{error}</Message>
             ) : (
                     <div className="custom-container">
                         <div className="my-10">
@@ -56,27 +65,41 @@ const PageProduct = () => {
                             </div>
                             
                             <div className="text-gray-800">
-                                <table className="table-auto">
-                                    <tbody className="border-gray-400 border">
-                                        <tr className="border-gray-400 border">
-                                            <td className="px-5 py-3">Price:</td>
-                                            <td className="px-5 py-3">${product.price}</td>
-                                        </tr>
-                                        <tr className="border-gray-400 border">
-                                            <td className="px-5 py-3">Status:
-                                            </td>
-                                            <td className="px-5 py-3">{product.countInStock > 0 ? 'In Stock' : 'No Stock'}</td>
-                                        </tr>
+                                <div className="border-gray-400 border">
+                                    <div className="border-gray-400 border-b flex justify-between">
+                                        <div className="px-5 py-3">Price:</div>
+                                        <div className="px-5 py-3">${product.price}</div>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <div className="px-5 py-3">Status:
+                                        </div>
+                                        <div className="px-5 py-3">{product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}</div>
+                                    </div>
+
+                                    {product.countInStock > 0 && (
+                                        <div className="border-gray-400 border-t border-b flex justify-between">
+                                            <div className="px-5 py-3">Qty:</div>
+                                            <select className="inline-block mr-5 px-5 py-3" value={qty} onChange={(e) => setQty(e.target.value)}>
+                                                {[...Array(product.countInStock).keys()].map(x => (
+                                                    <option key={x + 1} value={x + 1}>
+                                                        {x + 1}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    )}
     
-                                        <tr>
-                                            <td className="px-5 my-3">
-                                                <button className="px-10 py-2 bg-black text-white">
-                                                    Add to cart
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <div>
+                                        <div className="px-5 my-3 flex justify-center">
+                                            <button className={`px-16 py-2 text-white ${product.countInStock === 0 ? 'bg-gray-500' : 'bg-black'}`}
+                                                onClick={addToCartHandler}
+                                                disabled={product.countInStock === 0}
+                                            >
+                                                Add to cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

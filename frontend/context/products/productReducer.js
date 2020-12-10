@@ -2,7 +2,7 @@ import {
     PRODUCT_BY_ID_REQUEST,
     PRODUCT_BY_ID_SUCCESS,
     PRODUCT_BY_ID_FAIL
-} from '../../types';
+} from '../../types/productConstants';
 
 const ProductReducer = (state, action) => {
     switch(action.type) {
@@ -14,7 +14,7 @@ const ProductReducer = (state, action) => {
         case PRODUCT_BY_ID_SUCCESS: 
             return {
                 ...state,
-                loading: true,
+                loading: false,
                 product: action.payload
             }
         case PRODUCT_BY_ID_FAIL:

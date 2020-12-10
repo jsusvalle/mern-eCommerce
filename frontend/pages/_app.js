@@ -1,10 +1,13 @@
 import '../public/static/styles/main.css';
 import ProductState from '../context/products/productState';
+import CartState from '../context/cart/cartState';
 
 function MyApp({ Component, pageProps }) {
   return (
     <ProductState>
-      <Component {...pageProps} />
+      <CartState>
+        <Component {...pageProps} />
+      </CartState>
     </ProductState>
   )
 }
