@@ -2,30 +2,22 @@ import React, { useEffect, useContext } from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
-import cartContext from '../../context/cart/cartContext';
+import cartContext from '../context/cart/cartContext';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
-import Layout from '../../components/layouts/Layout';
-import Message from '../../components/Message';
+import Layout from '../components/layouts/Layout';
+import Message from '../components/Message';
 
 const HomeCart = () => {
 
     const CartContext = useContext(cartContext);
-    const { addToCart, cartItems } = CartContext;
+    const { cartItems, addToCart, removeFromCart } = CartContext;
 
     const router = useRouter();
-    const productId = router.query.id ;
-    const qty = router.query.qty ? router.query.qty : 1;
-
-    useEffect(() => {
-        if(productId) {
-            addToCart(productId, Number(qty));
-        }
-    }, [addToCart, productId, qty]);
 
     const removeFromCartHandler = id => {
-        console.log('remove', id)
+        removeFromCart(id)
     }
 
     const checkoutHandler = () => {
@@ -67,7 +59,7 @@ const HomeCart = () => {
                                         </select>
                                     </div>
                                     <div>
-                                        <button className="p-4"
+                                        <button className="p-4 hover:bg-gray-400 transition duration-500 ease-in-out"
                                             onClick={() => removeFromCartHandler(item.product)} 
                                         >
                                             <FontAwesomeIcon icon={faTrash} />

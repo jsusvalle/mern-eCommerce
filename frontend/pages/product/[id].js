@@ -9,6 +9,7 @@ import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 
 import productContext from '../../context/products/productContext';
+import cartContext from '../../context/cart/cartContext';
 
 const PageProduct = () => {
 
@@ -16,6 +17,9 @@ const PageProduct = () => {
 
     const ProductContext = useContext(productContext);
     const { product, loading, error, getProductById } = ProductContext;
+
+    const CartContext = useContext(cartContext);
+    const { addToCart } = CartContext;
 
     const router = useRouter();
     const { query: {id} } = router;
@@ -27,7 +31,8 @@ const PageProduct = () => {
     }, [id]);
 
     const addToCartHandler = () => {
-        router.push(`/cart/${id}?qty=${qty}`);
+        addToCart(id, Number(qty));
+        router.push(`/cart`);
     }
 
     return (  

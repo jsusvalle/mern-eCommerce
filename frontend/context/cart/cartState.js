@@ -43,11 +43,23 @@ const CartState = props => {
         }
     }
 
+    const removeFromCart = id => {
+        dispatch({
+            type: CART_REMOVE_ITEM,
+            payload: id
+        })
+
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
+        }
+    }
+
     return (
         <CartContext.Provider
             value={{
                 cartItems: state.cartItems,
-                addToCart
+                addToCart,
+                removeFromCart
             }}
         >
             {props.children}
