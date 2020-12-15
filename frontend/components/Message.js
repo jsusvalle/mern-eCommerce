@@ -2,7 +2,7 @@ import React from 'react'
 
 const Message = ({variant, children}) => {
     return ( 
-        <div variant={variant}>
+        <div className={`bg-red-${variant} p-5 text-white`}>
             {children}
         </div>
     );

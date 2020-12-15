@@ -25,7 +25,10 @@ const UserReducer = (state, action) => {
                 error: action.payload
             }
         case USER_LOGOUT:
-            return state;
+            return {
+                ...state,
+                userInfo: {}
+            }
         default: {
             return state;
         }

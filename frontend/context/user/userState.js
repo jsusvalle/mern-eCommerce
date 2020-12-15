@@ -12,7 +12,7 @@ import {
 } from '../../types/userConstants';
 
 const UserState = props => {
-    let userInfoFromStorage = [];
+    let userInfoFromStorage = {};
 
     if (typeof window !== 'undefined') {
         userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
@@ -47,11 +47,11 @@ const UserState = props => {
             })
 
             if (typeof window !== 'undefined') {
-                localStorage.setItem('userInfo', JSON.stringify(state.userInfo))
+                localStorage.setItem('userInfo', JSON.stringify(data))
             }
         } catch (error) {
             dispatch({
-                type: PRODUCT_BY_ID_FAIL,
+                type: USER_LOGIN_FAIL,
                 payload: error.response && error.response.data.message 
                             ? error.response.data.message 
                             : error.message
@@ -59,13 +59,21 @@ const UserState = props => {
         }
     } 
 
+    const logOut = () => {
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('userInfo');
+            dispatch({ type: USER_LOGOUT })
+        }
+    }
+
     return (
         <UserContext.Provider
             value={{
-                product: state.product,
+                userInfo: state.userInfo,
                 loading: state.loading,
                 error: state.error,
                 login,
+                logOut,
             }}
         >
             {props.children}
