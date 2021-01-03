@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import Link from 'next/link';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -14,6 +14,10 @@ const Header = () => {
     const logoutHandler = () => {
         logOut();
     }
+
+    useEffect(() => {
+        
+    }, [userInfo, logOut])
 
     return (  
         <header className="bg-gray-800">
@@ -39,18 +43,20 @@ const Header = () => {
                                 </div>
                             </Link>
 
-                            <div onClick={logoutHandler} className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg">
+                            <button onClick={logoutHandler} className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg">
                                 <FontAwesomeIcon icon={faSignOutAlt} style={{marginRight: '7px'}} />
                                 <p>Logout</p>
-                            </div>
+                            </button>
                         </>
                     ) : (
-                        <Link href="/login">
-                            <div className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg">
-                                <FontAwesomeIcon icon={faUser} style={{marginRight: '7px'}} />
-                                <p>SIGN IN</p>
-                            </div>
-                        </Link>
+                        <>
+                            <Link href="/login">
+                                <div className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg">
+                                    <FontAwesomeIcon icon={faUser} style={{marginRight: '7px'}} />
+                                    <p>SIGN IN</p>
+                                </div>
+                            </Link>
+                        </>
                     )}
                     
                 </nav>
