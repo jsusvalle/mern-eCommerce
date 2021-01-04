@@ -8,7 +8,10 @@ import {
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,
     USER_LOGIN_FAIL,
-    USER_LOGOUT
+    USER_LOGOUT,
+    USER_REGISTER_REQUEST,
+    USER_REGISTER_SUCCESS,
+    USER_REGISTER_FAIL
 } from '../../types/userConstants';
 
 const UserState = props => {
@@ -24,9 +27,9 @@ const UserState = props => {
         error: '',
     }
 
-    // Crear dispatch y state
     const [state, dispatch] = useReducer(UserReducer, initialState);
 
+    //* Login User
     const login = async (email, password) => {
         try {
             dispatch({
@@ -66,6 +69,39 @@ const UserState = props => {
         dispatch({ type: USER_LOGOUT })
     }
 
+    //* Register User
+    const register = async (name, email, password) => {
+        try {
+            dispatch({
+                type: USER_REGISTER_REQUEST
+            })
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            const { data } = await axios.post('http://localhost:5000/api/users', {name, email, password}, config);
+
+            dispatch({
+                type: USER_REGISTER_SUCCESS,
+                payload: data
+            })
+
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('userInfo', JSON.stringify(data))
+            }
+        } catch (error) {
+            dispatch({
+                type: USER_REGISTER_FAIL,
+                payload: error.response && error.response.data.message 
+                            ? error.response.data.message 
+                            : error.message
+            })
+        }
+    } 
+
     return (
         <UserContext.Provider
             value={{
@@ -74,6 +110,7 @@ const UserState = props => {
                 error: state.error,
                 login,
                 logOut,
+                register
             }}
         >
             {props.children}
