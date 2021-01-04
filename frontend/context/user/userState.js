@@ -15,7 +15,7 @@ const UserState = props => {
     let userInfoFromStorage = {};
 
     if (typeof window !== 'undefined') {
-        userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
+        userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {};
     }
 
     const initialState = {
@@ -62,8 +62,8 @@ const UserState = props => {
     const logOut = () => {
         if (typeof window !== 'undefined') {
             localStorage.removeItem('userInfo');
-            dispatch({ type: USER_LOGOUT })
         }
+        dispatch({ type: USER_LOGOUT })
     }
 
     return (

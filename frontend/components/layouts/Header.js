@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Link from 'next/link';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -11,13 +11,12 @@ const Header = () => {
     const UserContext = useContext(userContext);
     const { userInfo, logOut } = UserContext;
 
-    const logoutHandler = () => {
-        logOut();
-    }
+    const [stateuser, setStateUser] = useState({});
 
     useEffect(() => {
-        
-    }, [userInfo, logOut])
+        setStateUser(userInfo)
+        console.log(stateuser)
+    }, [userInfo, stateuser])
 
     return (  
         <header className="bg-gray-800">
@@ -35,20 +34,7 @@ const Header = () => {
                         </div>
                     </Link>
 
-                    {userInfo ? (
-                        <>
-                            <Link href="/profile">
-                                <div className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg mr-5">
-                                    <p>{userInfo.name} Profile</p>
-                                </div>
-                            </Link>
-
-                            <button onClick={logoutHandler} className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg">
-                                <FontAwesomeIcon icon={faSignOutAlt} style={{marginRight: '7px'}} />
-                                <p>Logout</p>
-                            </button>
-                        </>
-                    ) : (
+                    {Object.keys(stateuser).length === 0 ? (
                         <>
                             <Link href="/login">
                                 <div className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg">
@@ -57,8 +43,21 @@ const Header = () => {
                                 </div>
                             </Link>
                         </>
-                    )}
-                    
+                    ) : (
+                        <>
+                        <Link href="/profile">
+                            <div className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg mr-5">
+                                <p>{userInfo.name} Profile</p>
+                            </div>
+                        </Link>
+
+                        <button onClick={() => logOut()} className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg">
+                            <FontAwesomeIcon icon={faSignOutAlt} style={{marginRight: '7px'}} />
+                            <p>Logout</p>
+                        </button>
+                    </>
+                    )
+                    }
                 </nav>
             </div>
         </header>

@@ -19,7 +19,7 @@ const LoginScreen = () => {
     const redirect = router.query.redirect ? router.query.redirect : '/';
 
     useEffect(() => {
-        if(userInfo) {
+        if(Object.keys(userInfo).length > 0) {
             router.push(redirect);
         }
     }, [router, userInfo, redirect]);
