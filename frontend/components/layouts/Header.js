@@ -14,8 +14,7 @@ const Header = () => {
     const [stateuser, setStateUser] = useState({});
 
     useEffect(() => {
-        setStateUser(userInfo)
-        console.log(stateuser)
+        setStateUser(userInfo);
     }, [userInfo, stateuser])
 
     return (  

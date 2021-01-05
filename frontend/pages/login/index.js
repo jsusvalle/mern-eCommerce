@@ -16,11 +16,11 @@ const LoginScreen = () => {
     const [password, setPassword] = useState('')
 
     const router = useRouter();
-    const redirect = router.query.redirect ? router.query.redirect : '/';
+    const redirect = router.query.redirect ? `/cart/${router.query.redirect}` : '/';
 
     useEffect(() => {
-        if(Object.keys(userInfo).length > 0) {
-            router.push(redirect);
+        if(Object.keys(userInfo).length !== 0) {
+            router.push(`${redirect}`);
         }
     }, [router, userInfo, redirect]);
 

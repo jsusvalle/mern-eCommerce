@@ -2,12 +2,12 @@ import React, { useEffect, useContext } from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
-import cartContext from '../context/cart/cartContext';
+import cartContext from '../../context/cart/cartContext';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
-import Layout from '../components/layouts/Layout';
-import Message from '../components/Message';
+import Layout from '../../components/layouts/Layout';
+import Message from '../../components/Message';
 
 const HomeCart = () => {
 

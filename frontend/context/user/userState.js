@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import axios from 'axios';
+import instanceApi from '../../config/axiosConfig';
 
 import UserContext from './userContext';
 import UserReducer from './userReducer';
@@ -11,7 +11,14 @@ import {
     USER_LOGOUT,
     USER_REGISTER_REQUEST,
     USER_REGISTER_SUCCESS,
-    USER_REGISTER_FAIL
+    USER_REGISTER_FAIL,
+    USER_DETAILS_REQUEST,
+    USER_DETAILS_SUCCESS,
+    USER_DETAILS_FAIL,
+    USER_UPDATE_PROFILE_REQUEST,
+    USER_UPDATE_PROFILE_SUCCESS,
+    USER_UPDATE_PROFILE_FAIL,
+    USER_UPDATE_PROFILE_RESET,
 } from '../../types/userConstants';
 
 const UserState = props => {
@@ -23,7 +30,9 @@ const UserState = props => {
 
     const initialState = {
         userInfo: userInfoFromStorage,
+        userDetails: {},
         loading: false,
+        success: false,
         error: '',
     }
 
@@ -36,13 +45,7 @@ const UserState = props => {
                 type: USER_LOGIN_REQUEST
             })
 
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-
-            const { data } = await axios.post('http://localhost:5000/api/users/login', {email, password}, config);
+            const { data } = await instanceApi.post('/api/users/login', {email, password});
 
             dispatch({
                 type: USER_LOGIN_SUCCESS,
@@ -76,13 +79,7 @@ const UserState = props => {
                 type: USER_REGISTER_REQUEST
             })
 
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-
-            const { data } = await axios.post('http://localhost:5000/api/users', {name, email, password}, config);
+            const { data } = await instanceApi.post('/api/users', {name, email, password});
 
             dispatch({
                 type: USER_REGISTER_SUCCESS,
@@ -101,16 +98,85 @@ const UserState = props => {
             })
         }
     } 
+    
+    //* User Details
+    const getUserDetails = async (id) => {
+        try {
+            dispatch({
+                type: USER_DETAILS_REQUEST
+            })
+
+            const { userInfo } = state;
+
+            instanceApi.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
+
+            const { data } = await instanceApi.get(`api/users/${id}`);
+
+            dispatch({
+                type: USER_DETAILS_SUCCESS,
+                payload: data
+            })
+
+        } catch (error) {
+            dispatch({
+                type: USER_DETAILS_FAIL,
+                payload: error.response && error.response.data.message 
+                            ? error.response.data.message 
+                            : error.message
+            })
+        }
+    } 
+
+    //* Update User Profile
+    const updateUserProfile = async (user) => {
+        try {
+            dispatch({
+                type: USER_UPDATE_PROFILE_REQUEST
+            })
+
+            const { userInfo } = state;
+
+            instanceApi.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
+
+            const { data } = await instanceApi.put(`api/users/profile`, user);
+
+            dispatch({
+                type: USER_UPDATE_PROFILE_SUCCESS,
+                payload: data
+            })
+
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('userInfo', JSON.stringify(data))
+            }
+
+            setTimeout(() => {
+                dispatch({
+                    type: USER_UPDATE_PROFILE_RESET
+                })
+            }, 3000);
+        } catch (error) {
+            dispatch({
+                type: USER_UPDATE_PROFILE_FAIL,
+                payload: error.response && error.response.data.message 
+                            ? error.response.data.message 
+                            : error.message
+            })
+        }
+    } 
 
     return (
         <UserContext.Provider
             value={{
                 userInfo: state.userInfo,
+                userDetails: state.userDetails,
                 loading: state.loading,
                 error: state.error,
+                success: state.success,
                 login,
                 logOut,
-                register
+                register,
+                getUserDetails,
+                updateUserProfile,
             }}
         >
             {props.children}

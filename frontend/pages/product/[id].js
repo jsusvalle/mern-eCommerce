@@ -35,12 +35,14 @@ const PageProduct = () => {
         router.push(`/cart`);
     }
 
+    //TODO FIX SOME BUGS
+
     return (  
         <Layout>
             { loading ? (
                 <Loader />
             ) : error ? (
-                <Message variant='danger'>{error}</Message>
+                <Message color='red' variant='danger'>{error}</Message>
             ) : (
                     <div className="custom-container">
                         <div className="my-10">
