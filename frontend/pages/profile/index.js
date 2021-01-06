@@ -37,6 +37,9 @@ const ProfileScreen = () => {
 
         if(password !== confirmpassword) {
             setMessage('Passwords do not match');
+            setTimeout(() => {
+                setMessage(null);
+            }, 3000);
         } else {
             updateUserProfile({id: userDetails._id, name, email, password});
             setName(userDetails.name)
@@ -51,7 +54,7 @@ const ProfileScreen = () => {
             <div className="grid gap-10 md:grid-cols-5 custom-container">
                 <div className="col-span-2">
                     <h2 className="text-4xl uppercase tracking-widest my-6 font-semibold">Profile</h2>
-                    {message && <Message color='blue' variant='500'>{message}</Message>}
+                    {message && <Message color='red' variant='500'>{message}</Message>}
                     {error && <Message color='red' variant='600'>{error}</Message>}
                     {success && <Message color='green' variant='700'>Profile Updated</Message>}
                     {loading && <Loader />}

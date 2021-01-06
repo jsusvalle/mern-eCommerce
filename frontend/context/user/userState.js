@@ -121,8 +121,8 @@ const UserState = props => {
             dispatch({
                 type: USER_DETAILS_FAIL,
                 payload: error.response && error.response.data.message 
-                            ? error.response.data.message 
-                            : error.message
+                                ? error.response.data.message 
+                                : error.message
             })
         }
     } 
@@ -156,10 +156,10 @@ const UserState = props => {
             }, 3000);
         } catch (error) {
             dispatch({
-                type: USER_UPDATE_PROFILE_FAIL,
+                type: USER_DETAILS_FAIL,
                 payload: error.response && error.response.data.message 
-                            ? error.response.data.message 
-                            : error.message
+                                ? error.response.data.message 
+                                : error.message
             })
         }
     } 

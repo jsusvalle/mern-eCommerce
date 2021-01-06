@@ -2,14 +2,9 @@ import React from 'react';
 import styles from '../public/static/styles/loader.module.css';
 
 const Loader = () => {
-    return (  
-        <div className={styles.sk_chase}>
-            <div className={styles.sk_chase_dot}></div>
-            <div className={styles.sk_chase_dot}></div>
-            <div className={styles.sk_chase_dot}></div>
-            <div className={styles.sk_chase_dot}></div>
-            <div className={styles.sk_chase_dot}></div>
-            <div className={styles.sk_chase_dot}></div>
+    return (
+        <div className="flex justify-center content-center h-screen">
+            <div className="lds_dual_ring"></div>
         </div>
     );
 }
