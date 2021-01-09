@@ -7,21 +7,25 @@ import CartReducer from './cartReducer';
 import {
     CART_ADD_ITEM,
     CART_REMOVE_ITEM,
-    CART_SAVE_SHIPPING_ADDRESS
+    CART_SAVE_SHIPPING_ADDRESS,
+    CART_SAVE_PAYMENT_METHOD,
 } from '../../types/cartConstants';
 
 const CartState = props => {
     let cartItemsFromStorage = [];
     let shippingAddressFromStorage = {};
+    let paymentMethodFromStorage = '';
 
     if (typeof window !== 'undefined') {
         cartItemsFromStorage = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [];
         shippingAddressFromStorage = localStorage.getItem('shippingAddress') ? JSON.parse(localStorage.getItem('shippingAddress')) : {};
+        paymentMethodFromStorage = localStorage.getItem('paymentMethod') ? JSON.parse(localStorage.getItem('paymentMethod')) : '';
     }
     
     const initialState = {
         cartItems: cartItemsFromStorage,
         shippingAddress: shippingAddressFromStorage,
+        paymentMethod: paymentMethodFromStorage,
     }
 
     const [state, dispatch] = useReducer(CartReducer, initialState);
@@ -42,9 +46,7 @@ const CartState = props => {
             }
         })
 
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
-        }
+        typeof window !== 'undefined' && localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     }
 
     const removeFromCart = id => {
@@ -53,9 +55,7 @@ const CartState = props => {
             payload: id
         })
 
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
-        }
+        typeof window !== 'undefined' && localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     }
 
     const saveShippingAddress = (data) => {
@@ -64,7 +64,16 @@ const CartState = props => {
             payload: data,
         })
 
-        typeof window !== 'undefined' && localStorage.setItem('shippingAddress', JSON.stringify(data))
+        typeof window !== 'undefined' && localStorage.setItem('shippingAddress', JSON.stringify(data));
+    }
+
+    const savePaymentMethod = (data) => {
+        dispatch({
+            type: CART_SAVE_PAYMENT_METHOD,
+            payload: data,
+        })
+
+        typeof window !== 'undefined' && localStorage.setItem('paymentMethod', JSON.stringify(data));
     }
 
     return (
@@ -72,9 +81,11 @@ const CartState = props => {
             value={{
                 cartItems: state.cartItems,
                 shippingAddress: state.shippingAddress,
+                paymentMethod: state.paymentMethod,
                 addToCart,
                 removeFromCart,
-                saveShippingAddress
+                saveShippingAddress,
+                savePaymentMethod
             }}
         >
             {props.children}

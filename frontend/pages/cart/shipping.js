@@ -20,7 +20,7 @@ const ShippingScreen = () => {
     const submitHandler = (e) => {
         e.preventDefault();
         saveShippingAddress(({address, city, postalCode, country}));
-        router.push('/payment');
+        router.push('/cart/payment');
     }
 
     return (  
