@@ -20,7 +20,7 @@ const PaymentScreen = () => {
     const submitHandler = (e) => {
         e.preventDefault();
         savePaymentMethod(paymentMethod);
-        router.push('/placeorder');
+        router.push('/cart/placeorder');
     }
 
     return (  
@@ -30,6 +30,7 @@ const PaymentScreen = () => {
                 <h2 className="text-4xl uppercase tracking-widest my-6 font-semibold">Payment Method</h2>
 
                 <form onSubmit={submitHandler}>
+                    <h3 className="text-3xl my-4 text-gray-600">Select Method</h3>
                     <div className="my-6 flex flex-col">
                         <label className="inline-block mb-2 text-gray-600">PayPal or Credit Card</label>
                         <input type="radio" name="paymentMethod" id="PayPal" value='PayPal' checked onChange={(e) => setPaymentMethod(e.target.value)} />
