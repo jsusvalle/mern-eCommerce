@@ -13,7 +13,6 @@ const Layout = props => {
                     name="description"
                     content="Ecommerce ShopCart"
                 />
-                <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" /> 
             </Head>
 
             <Header />
