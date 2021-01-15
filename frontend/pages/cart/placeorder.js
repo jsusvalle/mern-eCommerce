@@ -2,10 +2,14 @@ import React, {useEffect, useState, useContext} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
+
 import cartContext from '../../context/cart/cartContext';
+import orderContext from '../../context/order/orderContext';
+import userContext from '../../context/user/userContext';
 
 import Layout from '../../components/layouts/Layout';
 import CheckoutSteps from '../../components/CheckoutSteps';
+import Message from '../../components/Message';
 
 import {addDecimals} from '../../utils/priceOperations';
 
@@ -14,6 +18,12 @@ const PlaceOrderScreen = () => {
     const router = useRouter();
     const CartContext = useContext(cartContext);
     const { cartItems, shippingAddress, paymentMethod } = CartContext;
+
+    const OrderContext = useContext(orderContext);
+    const { order, success, error, createOrder } = OrderContext;
+
+    const UserContext = useContext(userContext);
+    const { userInfo } = UserContext;
 
     //* Calculate Prices
 
@@ -25,8 +35,22 @@ const PlaceOrderScreen = () => {
 
     const totalPrice = (Number(itemsPrice) + Number(shippingPrice) + Number(taxPrice)).toFixed(2);
 
+    useEffect(() => {
+        if(success) {
+            router.push(`/order/${order._id}`);
+        }
+    }, [success])
+
     const placeOrderHandler = () => {
-        console.log('order')
+        createOrder(({
+            orderItems: cartItems,
+            shippingAddress,
+            paymentMethod,
+            itemsPrice,
+            shippingPrice,
+            taxPrice,
+            totalPrice
+        }), userInfo);
     }
 
     return (  
@@ -118,7 +142,10 @@ const PlaceOrderScreen = () => {
                                 </p>
                             </div>
                         </div>
-                        
+                        <div>
+                            {error && <Message color='red' variant='600'>{error}</Message>}
+                            {success && <Message color='green' variant='700'>Order Success</Message>}
+                        </div>
                     </div>
                     <div className="py-4 flex justify-center border-gray-300 border-b border-l border-r">
                         <button className="px-20 py-2 text-white bg-black uppercase" 

@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import axios from 'axios';
+import instanceApi from '../../config/axiosConfig';
 
 import OrderContext from './orderContext';
 import OrderReducer from './orderReducer';
@@ -12,7 +12,7 @@ import {
 
 const OrderState = props => {
     const initialState = {
-        order: [],
+        order: {},
         loading: false,
         success: false,
         error: '',
@@ -22,21 +22,19 @@ const OrderState = props => {
     const [state, dispatch] = useReducer(OrderReducer, initialState);
 
     //* Update User Profile
-    const createOrder = async (order) => {
+    const createOrder = async (order, userInfo) => {
         try {
             dispatch({
                 type: ORDER_CREATE_REQUEST
             })
 
-            const { userInfo } = state;
-
             instanceApi.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
 
-            const { data } = await instanceApi.post(`api/orders`, order);
+            const { data: {createdOrder} } = await instanceApi.post(`api/orders`, order);
 
             dispatch({
                 type: ORDER_CREATE_SUCCESS,
-                payload: data
+                payload: createdOrder
             })
         } catch (error) {
             dispatch({
