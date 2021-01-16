@@ -7,7 +7,10 @@ import OrderReducer from './orderReducer';
 import {
     ORDER_CREATE_REQUEST,
     ORDER_CREATE_SUCCESS,
-    ORDER_CREATE_FAIL
+    ORDER_CREATE_FAIL,
+    ORDER_DETAILS_REQUEST,
+    ORDER_DETAILS_SUCCESS,
+    ORDER_DETAILS_FAIL
 } from '../../types/orderConstants';
 
 const OrderState = props => {
@@ -21,7 +24,7 @@ const OrderState = props => {
     // Crear dispatch y state
     const [state, dispatch] = useReducer(OrderReducer, initialState);
 
-    //* Update User Profile
+    //* Create Order
     const createOrder = async (order, userInfo) => {
         try {
             dispatch({
@@ -46,6 +49,31 @@ const OrderState = props => {
         }
     } 
 
+    //* Get order by ID
+    const getOrderDetails = async (id, userInfo) => {
+        try {
+            dispatch({
+                type: ORDER_DETAILS_REQUEST
+            })
+
+            instanceApi.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
+
+            const { data } = await instanceApi.get(`api/orders/${id}`);
+
+            dispatch({
+                type: ORDER_DETAILS_SUCCESS,
+                payload: data
+            })
+        } catch (error) {
+            dispatch({
+                type: ORDER_DETAILS_FAIL,
+                payload: error.response && error.response.data.message 
+                                ? error.response.data.message 
+                                : error.message
+            })
+        }
+    } 
+
     return (
         <OrderContext.Provider
             value={{
@@ -54,6 +82,7 @@ const OrderState = props => {
                 success: state.success,
                 error: state.error,
                 createOrder,
+                getOrderDetails
             }}
         >
             {props.children}
