@@ -10,6 +10,7 @@ import userContext from '../../context/user/userContext';
 import Layout from '../../components/layouts/Layout';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import Message from '../../components/Message';
+import Loader from '../../components/Loader';
 
 import {addDecimals} from '../../utils/priceOperations';
 
@@ -20,7 +21,7 @@ const PlaceOrderScreen = () => {
     const { cartItems, shippingAddress, paymentMethod } = CartContext;
 
     const OrderContext = useContext(orderContext);
-    const { order, success, error, createOrder } = OrderContext;
+    const { order, success, error, loading, createOrder } = OrderContext;
 
     const UserContext = useContext(userContext);
     const { userInfo } = UserContext;
@@ -37,7 +38,8 @@ const PlaceOrderScreen = () => {
 
     useEffect(() => {
         if(success) {
-            router.push(`/order/${order._id}`);
+            router.push({pathname: '/order/[id]',
+            query: { id: order._id }});
         }
     }, [success])
 
@@ -55,9 +57,9 @@ const PlaceOrderScreen = () => {
 
     return (  
         <Layout>
+            <CheckoutSteps step1 step2 step3 step4 />
             <div className="lg:grid lg:grid-cols-12 gap-4 custom-container">
                 <div className="col-span-8">
-                    <CheckoutSteps step1 step2 step3 step4 />
                     <div className="border-gray-300 border-b pb-8">
                         <h2 className="text-4xl uppercase tracking-widest my-6 font-semibold">Shipping</h2>
 
@@ -143,6 +145,7 @@ const PlaceOrderScreen = () => {
                             </div>
                         </div>
                         <div>
+                            {loading && <Loader /> }
                             {error && <Message color='red' variant='600'>{error}</Message>}
                             {success && <Message color='green' variant='700'>Order Success</Message>}
                         </div>

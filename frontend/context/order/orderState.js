@@ -16,6 +16,7 @@ import {
 const OrderState = props => {
     const initialState = {
         order: {},
+        loadingscreenorder: false, 
         loading: false,
         success: false,
         error: '',
@@ -27,9 +28,7 @@ const OrderState = props => {
     //* Create Order
     const createOrder = async (order, userInfo) => {
         try {
-            dispatch({
-                type: ORDER_CREATE_REQUEST
-            })
+            dispatch({ type: ORDER_CREATE_REQUEST });
 
             instanceApi.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
 
@@ -39,6 +38,7 @@ const OrderState = props => {
                 type: ORDER_CREATE_SUCCESS,
                 payload: createdOrder
             })
+
         } catch (error) {
             dispatch({
                 type: ORDER_CREATE_FAIL,
@@ -52,9 +52,7 @@ const OrderState = props => {
     //* Get order by ID
     const getOrderDetails = async (id, userInfo) => {
         try {
-            dispatch({
-                type: ORDER_DETAILS_REQUEST
-            })
+            dispatch({ type: ORDER_DETAILS_REQUEST })
 
             instanceApi.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
 
@@ -79,6 +77,7 @@ const OrderState = props => {
             value={{
                 order: state.order,
                 loading: state.loading,
+                loadingscreenorder: state.loadingscreenorder,
                 success: state.success,
                 error: state.error,
                 createOrder,

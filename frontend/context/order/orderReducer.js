@@ -10,7 +10,6 @@ import {
 const OrderReducer = (state, action) => {
     switch(action.type) {
         case ORDER_CREATE_REQUEST:
-        case ORDER_DETAILS_REQUEST:
             return {
                 ...state,
                 loading: true
@@ -19,21 +18,32 @@ const OrderReducer = (state, action) => {
             return {
                 ...state,
                 loading: false,
+                loadingscreenorder: true,
                 success: true,
-                order: action.payload
+                order: action.payload,
             }
         case ORDER_CREATE_FAIL:
-        case ORDER_DETAILS_FAIL:
             return {
                 ...state,
                 loading: false,
                 error: action.payload
             }
+        case ORDER_DETAILS_REQUEST:
+            return {
+                ...state,
+                loadingscreenorder: true
+            }
         case ORDER_DETAILS_SUCCESS:
             return {
                 ...state,
-                loading: false,
+                loadingscreenorder: false,
                 order: action.payload
+            }
+        case ORDER_DETAILS_FAIL:
+            return {
+                ...state,
+                loadingscreenorder: false,
+                error: action.payload
             }
         default: {
             return state;

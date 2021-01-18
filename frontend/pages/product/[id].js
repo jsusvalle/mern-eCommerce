@@ -46,9 +46,9 @@ const PageProduct = () => {
             ) : (
                     <div className="custom-container">
                         <div className="my-10">
-                            <Link href="/">
+                            <button onClick={() => router.back()}>
                                 <p className="ml-5 uppercase hover:text-yellow-500 cursor-pointer font-semibold inline-block">Go Back</p>
-                            </Link>
+                            </button>
                         </div>
     
                         <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
