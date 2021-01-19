@@ -10,7 +10,11 @@ import {
     ORDER_CREATE_FAIL,
     ORDER_DETAILS_REQUEST,
     ORDER_DETAILS_SUCCESS,
-    ORDER_DETAILS_FAIL
+    ORDER_DETAILS_FAIL,
+    ORDER_PAY_REQUEST,
+    ORDER_PAY_SUCCESS,
+    ORDER_PAY_FAIL,
+    ORDER_PAY_RESET,
 } from '../../types/orderConstants';
 
 const OrderState = props => {
@@ -50,13 +54,13 @@ const OrderState = props => {
     } 
 
     //* Get order by ID
-    const getOrderDetails = async (id, userInfo) => {
+    const getOrderDetails = async (orderID, userInfo) => {
         try {
             dispatch({ type: ORDER_DETAILS_REQUEST })
 
             instanceApi.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
 
-            const { data } = await instanceApi.get(`api/orders/${id}`);
+            const { data } = await instanceApi.get(`api/orders/${orderID}`);
 
             dispatch({
                 type: ORDER_DETAILS_SUCCESS,
@@ -72,6 +76,25 @@ const OrderState = props => {
         }
     } 
 
+    //* Put order Pay
+    const putOrderPay = async (orderID, paymentResult, userInfo) => {
+        try {
+            dispatch({ type: ORDER_PAY_REQUEST })
+
+            instanceApi.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
+
+            const { data } = await instanceApi.put(`api/orders/${orderID}/pay`,paymentResult);
+
+            dispatch({ type: ORDER_PAY_SUCCESS })
+        } catch (error) {
+            dispatch({
+                type: ORDER_PAY_FAIL,
+                payload: error.response && error.response.data.message 
+                                ? error.response.data.message 
+                                : error.message
+            })
+        }
+    } 
     return (
         <OrderContext.Provider
             value={{
@@ -81,7 +104,8 @@ const OrderState = props => {
                 success: state.success,
                 error: state.error,
                 createOrder,
-                getOrderDetails
+                getOrderDetails,
+                putOrderPay
             }}
         >
             {props.children}
