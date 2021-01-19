@@ -1,7 +1,9 @@
 import React, {useEffect, useState, useContext} from 'react';
 import Link from 'next/link';
+import axios from 'axios';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
+import { PayPalButton } from 'react-paypal-button-v2';
 
 import orderContext from '../../context/order/orderContext';
 import userContext from '../../context/user/userContext';
@@ -16,8 +18,10 @@ const OrderScreen = () => {
     const router = useRouter();
     const { query: {id} } = router;
 
+    const [sdkReday, setSdkReady] = useState(false);
+
     const OrderContext = useContext(orderContext);
-    const { order, loadingscreenorder, error, getOrderDetails } = OrderContext;
+    const { order, loadingscreenorder, loading, success, error, getOrderDetails, payOrder, resetStateOrder } = OrderContext;
 
     const UserContext = useContext(userContext);
     const { userInfo } = UserContext;
@@ -25,10 +29,34 @@ const OrderScreen = () => {
     let itemsPrice;
 
     useEffect(() => {
-        if(id) {
-            getOrderDetails(id, userInfo);
+        const addPaypalScript = async () => {
+            const { data: clientId } = await axios.get('http://localhost:5000/api/config/paypal');
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+            script.async = true;
+            script.onload = () => {
+                setSdkReady(true)
+            }
+            document.body.appendChild(script)
         }
-    }, [id]);
+
+        if(id && Object.keys(order).length === 0 || success) {
+            // resetStateOrder();
+            getOrderDetails(id, userInfo);
+        } else if(!order.isPaid) {
+            if(!window.paypal) {
+                addPaypalScript();
+            } else {
+                setSdkReady(true);
+            }
+        }
+    }, [id, success]);
+
+    const successPaymentHandler = (paymentResult) => {
+        console.log(paymentResult)
+        payOrder(id, paymentResult);
+    }
 
     if(!loadingscreenorder && Object.keys(order).length !== 0) {
         itemsPrice = addDecimals(order.orderItems.reduce((acc, item) => acc + item.qty * item.price, 0));
@@ -137,6 +165,17 @@ const OrderScreen = () => {
                                         </p>
                                     </div>
                                 </div>
+                                {!order.isPaid && (
+                                    <div className="mt-10">
+                                        {loading && <Loader />}
+                                        {!sdkReday ? <Loader /> : (
+                                            <PayPalButton 
+                                                amount={order.totalPrice} 
+                                                onSuccess={successPaymentHandler} 
+                                            />
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

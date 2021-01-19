@@ -42,6 +42,7 @@ const OrderReducer = (state, action) => {
             return {
                 ...state,
                 loadingscreenorder: false,
+                success: true,
                 order: action.payload
             }
         case ORDER_DETAILS_FAIL:

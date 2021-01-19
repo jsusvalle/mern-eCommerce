@@ -77,7 +77,7 @@ const OrderState = props => {
     } 
 
     //* Put order Pay
-    const putOrderPay = async (orderID, paymentResult, userInfo) => {
+    const payOrder = async (orderID, paymentResult, userInfo) => {
         try {
             dispatch({ type: ORDER_PAY_REQUEST })
 
@@ -95,6 +95,11 @@ const OrderState = props => {
             })
         }
     } 
+
+    const resetStateOrder = () => {
+        dispatch({ type: ORDER_PAY_RESET });
+    }
+
     return (
         <OrderContext.Provider
             value={{
@@ -105,7 +110,8 @@ const OrderState = props => {
                 error: state.error,
                 createOrder,
                 getOrderDetails,
-                putOrderPay
+                payOrder,
+                resetStateOrder
             }}
         >
             {props.children}
