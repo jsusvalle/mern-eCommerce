@@ -16,12 +16,15 @@ import { addDecimals } from '../../utils/priceOperations';
 const OrderScreen = () => {
 
     const router = useRouter();
-    const { query: {id} } = router;
+    const { query: {id:orderID} } = router;
 
     const [sdkReday, setSdkReady] = useState(false);
 
     const OrderContext = useContext(orderContext);
-    const { order, loadingscreenorder, loading, success, error, getOrderDetails, payOrder, resetStateOrder } = OrderContext;
+    const { order, error,
+            orderDetailsScreen: { loading: loadingScreenOrder, success: successScreenOrder }, 
+            orderPay: { loading: loadingPay, success: successPay },
+            getOrderDetails, payOrder, resetStateOrder } = OrderContext;
 
     const UserContext = useContext(userContext);
     const { userInfo } = UserContext;
@@ -41,30 +44,32 @@ const OrderScreen = () => {
             document.body.appendChild(script)
         }
 
-        if(id && Object.keys(order).length === 0 || success) {
-            // resetStateOrder();
-            getOrderDetails(id, userInfo);
-        } else if(!order.isPaid) {
-            if(!window.paypal) {
-                addPaypalScript();
-            } else {
-                setSdkReady(true);
+        if(orderID) {
+            if(Object.keys(order).length === 0 || successPay || orderID !== order._id) {
+                resetStateOrder();
+                console.log(order)
+                getOrderDetails(orderID, userInfo);
+            } else if(!order.isPaid) {
+                if(!window.paypal) {
+                    addPaypalScript();
+                } else {
+                    setSdkReady(true);
+                }
             }
-        }
-    }, [id, success]);
+        } 
+    }, [orderID, successPay, order]);
 
     const successPaymentHandler = (paymentResult) => {
-        console.log(paymentResult)
-        payOrder(id, paymentResult);
+        payOrder(orderID, paymentResult, userInfo);
     }
 
-    if(!loadingscreenorder && Object.keys(order).length !== 0) {
+    if(!loadingScreenOrder && Object.keys(order).length !== 0) {
         itemsPrice = addDecimals(order.orderItems.reduce((acc, item) => acc + item.qty * item.price, 0));
     }
 
     return (  
         <Layout>
-            { loadingscreenorder || Object.keys(order).length === 0 ? (
+            { loadingScreenOrder || Object.keys(order).length === 0 ? (
                 <Loader />
             ) : error ? (
                 <Message color='red' variant='danger'>{error}</Message>
@@ -167,7 +172,7 @@ const OrderScreen = () => {
                                 </div>
                                 {!order.isPaid && (
                                     <div className="mt-10">
-                                        {loading && <Loader />}
+                                        {loadingPay && <Loader />}
                                         {!sdkReday ? <Loader /> : (
                                             <PayPalButton 
                                                 amount={order.totalPrice} 

@@ -14,7 +14,6 @@ import {
 const OrderReducer = (state, action) => {
     switch(action.type) {
         case ORDER_CREATE_REQUEST:
-        case ORDER_PAY_REQUEST:
             return {
                 ...state,
                 loading: true
@@ -23,7 +22,6 @@ const OrderReducer = (state, action) => {
             return {
                 ...state,
                 loading: false,
-                loadingscreenorder: true,
                 success: true,
                 order: action.payload,
             }
@@ -36,34 +34,45 @@ const OrderReducer = (state, action) => {
         case ORDER_DETAILS_REQUEST:
             return {
                 ...state,
-                loadingscreenorder: true
+                orderDetailsScreen: { loading: true}
             }
         case ORDER_DETAILS_SUCCESS:
             return {
                 ...state,
-                loadingscreenorder: false,
-                success: true,
+                orderDetailsScreen: { loading: false, success: true },   
                 order: action.payload
             }
         case ORDER_DETAILS_FAIL:
             return {
                 ...state,
-                loadingscreenorder: false,
+                orderDetailsScreen: { loading: false },
                 error: action.payload
+            }
+        case ORDER_PAY_REQUEST:
+            return {
+                ...state,
+                orderPay: { loading: true },
             }
         case ORDER_PAY_SUCCESS:
             return {
-                loading: false,
-                success: true
+                ...state,
+                orderPay: { loading: false, success: true },
             }
         case ORDER_PAY_FAIL:
             return {
                 ...state,
-                loading: false,
-                error: action.payload
+                error: action.payload,
+                orderPay: { loading: false }
             }
         case ORDER_PAY_RESET:
-            return {}
+            return {
+                ...state,
+                orderPay: {
+                    loading: false,
+                    success: false,
+                    error: '' 
+                }
+            }
         default: {
             return state;
         }

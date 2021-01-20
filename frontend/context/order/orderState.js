@@ -20,10 +20,19 @@ import {
 const OrderState = props => {
     const initialState = {
         order: {},
-        loadingscreenorder: false, 
         loading: false,
         success: false,
         error: '',
+        orderDetailsScreen: {
+            loading: true,
+            success: false,
+            error: '' 
+        }, 
+        orderPay: {
+            loading: false,
+            success: false,
+            error: '' 
+        }
     }
 
     // Crear dispatch y state
@@ -78,6 +87,7 @@ const OrderState = props => {
 
     //* Put order Pay
     const payOrder = async (orderID, paymentResult, userInfo) => {
+        console.log(userInfo)
         try {
             dispatch({ type: ORDER_PAY_REQUEST })
 
@@ -105,9 +115,10 @@ const OrderState = props => {
             value={{
                 order: state.order,
                 loading: state.loading,
-                loadingscreenorder: state.loadingscreenorder,
                 success: state.success,
                 error: state.error,
+                orderDetailsScreen: state.orderDetailsScreen,
+                orderPay: state.orderPay,
                 createOrder,
                 getOrderDetails,
                 payOrder,
