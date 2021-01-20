@@ -2,6 +2,10 @@ import React, {useEffect, useState, useContext} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import userContext from '../../context/user/userContext';
+import orderContext from '../../context/order/orderContext';
+
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faTimes} from '@fortawesome/free-solid-svg-icons';
 
 import Layout from '../../components/layouts/Layout';
 import Loader from '../../components/Loader';
@@ -10,6 +14,9 @@ import Message from '../../components/Message';
 const ProfileScreen = () => {
     const UserContext = useContext(userContext);
     const {getUserDetails, updateUserProfile, userDetails, userInfo, loading, error, success} = UserContext;
+
+    const OrderContext = useContext(orderContext);
+    const { myOrdersList, loading: loadingOrders, error: errorOrders, getMyListOrders } = OrderContext;
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -25,12 +32,13 @@ const ProfileScreen = () => {
         } else {
             if(Object.keys(userDetails).length === 0) {
                 getUserDetails('profile');
+                getMyListOrders(userInfo);
             } else {
                 setName(userDetails.name)
                 setEmail(userDetails.email)
             }
         }
-    }, [updateUserProfile, getUserDetails, userDetails, router, userInfo]);
+    }, [userDetails, router, userInfo]);
 
     const submitHandler = e => {
         e.preventDefault();
@@ -48,6 +56,8 @@ const ProfileScreen = () => {
             setPassword('');
         }
     } 
+
+    //TODO * FIX RESPONSIVE TABLE
 
     return (  
         <Layout>
@@ -89,6 +99,56 @@ const ProfileScreen = () => {
 
                 <div className="mt-4 col-span-3">
                     <h3 className="text-4xl uppercase tracking-widest my-6 font-semibold">My Orders</h3>       
+                    {loadingOrders ? <Loader /> : errorOrders ? <Message color="red" variant="500">{errorOrders}</Message> : (
+                        <div>
+                            <div className="shadow overflow-hidden rounded border-b border-gray-200">
+                                <table className="min-w-full bg-white">
+                                    <thead className="bg-gray-800 text-white">
+                                        <tr>
+                                            <th className="text-left py-3 px-2 uppercase font-semibold text-sm">Id</th>
+                                            <th className="text-left py-3 px-2 uppercase font-semibold text-sm">Date</th>
+                                            <th className="text-left py-3 px-2 uppercase font-semibold text-sm">Total</th>
+                                            <th className="text-left py-3 px-2 uppercase font-semibold text-sm">Paid</th>
+                                            <th className="text-left py-3 px-2 uppercase font-semibold text-sm">Delivered</th>
+                                            <th className="text-left py-3 px-2 uppercase font-semibold text-sm">Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="text-gray-700">
+                                        {myOrdersList.map((order, index) => (
+                                            <tr key={index}>
+                                                <td className="text-left py-3 px-2 break-words">{order._id}</td>
+                                                <td className="text-left py-3 px-2">{order.createdAt.substring(0, 10)}</td>
+                                                <td className="text-left py-3 px-2">{order.totalPrice}</td>
+                                                <td className="text-left py-3 px-2">
+                                                    { order.isPaid ? (
+                                                        order.paidAt.substring(0, 10)
+                                                    ) : (
+                                                        <FontAwesomeIcon icon={faTimes} style={{color: '#c53030', marginTop: '12px', marginLeft: '25px'}} />
+                                                    )}
+                                                </td>
+                                                <td className="text-left py-3 px-2">
+                                                    { order.isDelivered ? (
+                                                        order.deliveredAt.substring(0, 10)
+                                                    ) : (
+                                                        <FontAwesomeIcon icon={faTimes} style={{color: '#c53030', marginTop: '12px', marginLeft: '25px'}} />
+                                                    )}
+                                                </td>
+                                                <td className="text-left py-3 px-2">
+                                                    <Link href={{pathname: '/order/[id]',
+                                                        query: { id: order._id }}} as={`/order/${order._id}`} 
+                                                    >
+                                                        <button>
+                                                            Details
+                                                        </button>
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </Layout>

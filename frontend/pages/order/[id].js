@@ -171,7 +171,7 @@ const OrderScreen = () => {
                                     </div>
                                 </div>
                                 {!order.isPaid && (
-                                    <div className="mt-10">
+                                    <div className="mt-10 mx-6">
                                         {loadingPay && <Loader />}
                                         {!sdkReday ? <Loader /> : (
                                             <PayPalButton 

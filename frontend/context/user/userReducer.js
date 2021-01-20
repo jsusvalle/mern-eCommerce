@@ -30,7 +30,7 @@ const UserReducer = (state, action) => {
                 loading: false,
                 userInfo: action.payload
             }
-        case USER_UPDATE_PROFILE_FAIL:
+        case USER_DETAILS_FAIL:
         case USER_UPDATE_PROFILE_FAIL:
         case USER_LOGIN_FAIL:
         case USER_REGISTER_FAIL:
