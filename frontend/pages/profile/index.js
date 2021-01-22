@@ -97,7 +97,7 @@ const ProfileScreen = () => {
                     </form>
                 </div>
 
-                <div className="mt-4 col-span-3">
+                <div className="col-span-3">
                     <h3 className="text-4xl uppercase tracking-widest my-6 font-semibold">My Orders</h3>       
                     {loadingOrders ? <Loader /> : errorOrders ? <Message color="red" variant="500">{errorOrders}</Message> : (
                         <div>

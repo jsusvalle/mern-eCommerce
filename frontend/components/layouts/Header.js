@@ -1,5 +1,6 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faShoppingCart, faSignOutAlt, faUser} from '@fortawesome/free-solid-svg-icons';
@@ -13,9 +14,16 @@ const Header = () => {
 
     const [stateuser, setStateUser] = useState({});
 
+    const router = useRouter();
+
     useEffect(() => {
         setStateUser(userInfo);
     }, [userInfo, stateuser])
+
+    const logOutUser = () => {
+        logOut();
+        router.push('/login');
+    }
 
     return (  
         <header className="bg-gray-800">
@@ -50,7 +58,7 @@ const Header = () => {
                             </div>
                         </Link>
 
-                        <button onClick={() => logOut()} className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg">
+                        <button onClick={logOutUser} className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg">
                             <FontAwesomeIcon icon={faSignOutAlt} style={{marginRight: '7px'}} />
                             <p>Logout</p>
                         </button>

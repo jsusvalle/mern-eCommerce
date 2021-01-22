@@ -18,6 +18,7 @@ import {
     ORDER_MY_LIST_REQUEST,
     ORDER_MY_LIST_SUCCESS,
     ORDER_MY_LIST_FAIL,
+    ORDER_MY_LIST_RESET
 } from '../../types/orderConstants';
 
 const OrderState = props => {
