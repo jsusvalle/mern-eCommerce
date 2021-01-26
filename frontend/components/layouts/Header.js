@@ -21,8 +21,8 @@ const Header = () => {
     }, [userInfo, stateuser])
 
     const logOutUser = () => {
-        logOut();
         router.push('/login');
+        logOut();
     }
 
     return (  

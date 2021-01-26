@@ -33,7 +33,7 @@ const UserState = props => {
 
     const initialState = {
         userInfo: userInfoFromStorage,
-        userDetails: {},
+        userDetailsScreen: { userDetails: {}, loading: false, success: false, error: '' },
         loading: false,
         success: false,
         error: '',
@@ -173,7 +173,7 @@ const UserState = props => {
         <UserContext.Provider
             value={{
                 userInfo: state.userInfo,
-                userDetails: state.userDetails,
+                userDetailsScreen: state.userDetailsScreen,
                 loading: state.loading,
                 error: state.error,
                 success: state.success,

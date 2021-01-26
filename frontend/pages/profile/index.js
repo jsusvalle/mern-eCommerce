@@ -13,7 +13,10 @@ import Message from '../../components/Message';
 
 const ProfileScreen = () => {
     const UserContext = useContext(userContext);
-    const {getUserDetails, updateUserProfile, userDetails, userInfo, loading, error, success} = UserContext;
+    const {getUserDetails, updateUserProfile, 
+        userDetailsScreen: { userDetails, loading: loadingUserDetails, success: successUserDetails, error: errorUserDetails }, 
+        userInfo, loading, error, success
+    } = UserContext;
 
     const OrderContext = useContext(orderContext);
     const { myOrdersList, loading: loadingOrders, error: errorOrders, getMyListOrders } = OrderContext;
@@ -30,7 +33,7 @@ const ProfileScreen = () => {
         if(!userInfo) {
             router.push('/login');
         } else {
-            if(Object.keys(userDetails).length === 0) {
+            if(!successUserDetails) {
                 getUserDetails('profile');
                 getMyListOrders(userInfo);
             } else {
@@ -65,9 +68,9 @@ const ProfileScreen = () => {
                 <div className="col-span-2">
                     <h2 className="text-4xl uppercase tracking-widest my-6 font-semibold">Profile</h2>
                     {message && <Message color='red' variant='500'>{message}</Message>}
-                    {error && <Message color='red' variant='600'>{error}</Message>}
+                    {error || errorUserDetails && <Message color='red' variant='600'>{error}</Message>}
                     {success && <Message color='green' variant='700'>Profile Updated</Message>}
-                    {loading && <Loader />}
+                    {loading || loadingUserDetails && <Loader />}
 
                     <form onSubmit={submitHandler}>
                         <div className="my-6 flex flex-col">

@@ -48,18 +48,17 @@ const UserReducer = (state, action) => {
         case USER_DETAILS_REQUEST:
             return {
                 ...state,
-                loading: true
+                userDetailsScreen: { loading: true }
             }
         case USER_DETAILS_SUCCESS:
             return {
                 ...state,
-                loading: false,
-                userDetails: action.payload
+                userDetailsScreen: { loading: false, success: true, userDetails: action.payload }
             }
         case USER_DETAILS_RESET:
             return {
                 ...state,
-                userDetails: {}
+                userDetailsScreen: { loading: false, success: false, userDetails: {}, error: '' }
             }
         case USER_UPDATE_PROFILE_REQUEST:
             return {
@@ -72,7 +71,7 @@ const UserReducer = (state, action) => {
                 loading: false,
                 success: true,
                 userInfo: action.payload,
-                userDetails: action.payload
+                userDetailsScreen: { userDetails: action.payload }
             }
         case USER_UPDATE_PROFILE_RESET:
             return {
