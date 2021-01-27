@@ -14,6 +14,9 @@ import {
     USER_UPDATE_PROFILE_SUCCESS,
     USER_UPDATE_PROFILE_FAIL,
     USER_UPDATE_PROFILE_RESET,
+    USER_LIST_REQUEST,
+    USER_LIST_SUCCESS,
+    USER_LIST_FAIL,
 } from '../../types/userConstants';
 
 const UserReducer = (state, action) => {
@@ -31,7 +34,6 @@ const UserReducer = (state, action) => {
                 loading: false,
                 userInfo: action.payload
             }
-        case USER_DETAILS_FAIL:
         case USER_UPDATE_PROFILE_FAIL:
         case USER_LOGIN_FAIL:
         case USER_REGISTER_FAIL:
@@ -54,6 +56,11 @@ const UserReducer = (state, action) => {
             return {
                 ...state,
                 userDetailsScreen: { loading: false, success: true, userDetails: action.payload }
+            }
+        case USER_DETAILS_FAIL:
+            return {
+                ...state,
+                userDetailsScreen: { loading: false, error: action.payload }
             }
         case USER_DETAILS_RESET:
             return {
@@ -79,6 +86,21 @@ const UserReducer = (state, action) => {
                 loading: false,
                 success: false,
                 error: ''
+            }
+        case USER_LIST_REQUEST:
+            return {
+                ...state,
+                userListScreen: { loading: true }
+            }
+        case USER_LIST_SUCCESS:
+            return {
+                ...state,
+                userListScreen: { loading: false, success: true, userList: action.payload }
+            }
+        case USER_LIST_FAIL:
+            return {
+                ...state,
+                userListScreen: { loading: false, error: action.payload }
             }
         default: {
             return state;

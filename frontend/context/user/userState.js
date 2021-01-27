@@ -20,6 +20,9 @@ import {
     USER_UPDATE_PROFILE_SUCCESS,
     USER_UPDATE_PROFILE_FAIL,
     USER_UPDATE_PROFILE_RESET,
+    USER_LIST_REQUEST,
+    USER_LIST_SUCCESS,
+    USER_LIST_FAIL,
 } from '../../types/userConstants';
 
 import { ORDER_MY_LIST_RESET } from '../../types/orderConstants';
@@ -33,6 +36,7 @@ const UserState = props => {
 
     const initialState = {
         userInfo: userInfoFromStorage,
+        userListScreen: {userList: [], loading: false, success: false, error: ''},
         userDetailsScreen: { userDetails: {}, loading: false, success: false, error: '' },
         loading: false,
         success: false,
@@ -68,6 +72,7 @@ const UserState = props => {
         }
     } 
 
+    //* Logout User
     const logOut = () => {
         if (typeof window !== 'undefined') {
             localStorage.removeItem('userInfo');
@@ -169,11 +174,41 @@ const UserState = props => {
         }
     } 
 
+    //* Get List Users
+    //* User Details
+    const getListUsers = async () => {
+        try {
+            dispatch({
+                type: USER_LIST_REQUEST
+            })
+
+            const { userInfo } = state;
+
+            instanceApi.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
+
+            const { data } = await instanceApi.get(`api/users`);
+
+            dispatch({
+                type: USER_LIST_SUCCESS,
+                payload: data
+            })
+
+        } catch (error) {
+            dispatch({
+                type: USER_LIST_FAIL,
+                payload: error.response && error.response.data.message 
+                                ? error.response.data.message 
+                                : error.message
+            })
+        }
+    } 
+
     return (
         <UserContext.Provider
             value={{
                 userInfo: state.userInfo,
                 userDetailsScreen: state.userDetailsScreen,
+                userListScreen: state.userListScreen,
                 loading: state.loading,
                 error: state.error,
                 success: state.success,
@@ -182,6 +217,7 @@ const UserState = props => {
                 register,
                 getUserDetails,
                 updateUserProfile,
+                getListUsers
             }}
         >
             {props.children}
