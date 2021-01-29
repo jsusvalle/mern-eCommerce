@@ -1,29 +1,37 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faShoppingCart, faSignOutAlt, faUser} from '@fortawesome/free-solid-svg-icons';
+import {faShoppingCart, faUser} from '@fortawesome/free-solid-svg-icons';
 
 import userContext from '../../context/user/userContext'; 
+import DropdownMenuProfile from './DropdownMenuProfile';
+import DropdownMenuAdmin from './DropdownMenuAdmin';
 
 const Header = () => {
 
+    const itemsDropdownMenuAdmin = [
+        {
+            label: 'Users',
+            link: '/admin/users'
+        }, {
+            label: 'Products',
+            link: '/admin/products'
+        },
+        {
+            label: 'Orders',
+            link: '/admin/orders'
+        }
+    ]
+
     const UserContext = useContext(userContext);
-    const { userInfo, logOut } = UserContext;
+    const { userInfo } = UserContext;
 
     const [stateuser, setStateUser] = useState({});
-
-    const router = useRouter();
 
     useEffect(() => {
         setStateUser(userInfo);
     }, [userInfo, stateuser])
-
-    const logOutUser = () => {
-        router.push('/login');
-        logOut();
-    }
 
     return (  
         <header className="bg-gray-800">
@@ -52,19 +60,11 @@ const Header = () => {
                         </>
                     ) : (
                         <>
-                        <Link href="/profile">
-                            <div className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg mr-5">
-                                <p>{userInfo.name} Profile</p>
-                            </div>
-                        </Link>
-
-                        <button onClick={logOutUser} className="transition duration-500 ease-in-out flex items-center hover:bg-gray-700 cursor-pointer p-2 rounded-lg">
-                            <FontAwesomeIcon icon={faSignOutAlt} style={{marginRight: '7px'}} />
-                            <p>Logout</p>
-                        </button>
-                    </>
-                    )
-                    }
+                            <DropdownMenuProfile label={userInfo.name} />
+                        
+                            {userInfo.isAdmin && <DropdownMenuAdmin label='Admin' items={itemsDropdownMenuAdmin} /> }
+                        </>
+                    )}
                 </nav>
             </div>
         </header>
