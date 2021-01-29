@@ -36,7 +36,7 @@ const UserState = props => {
 
     const initialState = {
         userInfo: userInfoFromStorage,
-        userListScreen: {userList: [], loading: false, success: false, error: ''},
+        userListScreen: {userList: [], loading: true, success: false, error: ''},
         userDetailsScreen: { userDetails: {}, loading: false, success: false, error: '' },
         loading: false,
         success: false,

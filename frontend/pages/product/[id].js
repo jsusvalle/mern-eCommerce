@@ -98,7 +98,7 @@ const PageProduct = () => {
     
                                     <div>
                                         <div className="px-5 my-3 flex justify-center">
-                                            <button className={`px-16 py-2 text-white ${product.countInStock === 0 ? 'bg-gray-500' : 'bg-black'}`}
+                                            <button className={`px-16 py-2 text-white ${product.countInStock === 0 ? 'bg-gray-500 cursor-not-allowed' : 'bg-black'}`}
                                                 onClick={addToCartHandler}
                                                 disabled={product.countInStock === 0}
                                             >
